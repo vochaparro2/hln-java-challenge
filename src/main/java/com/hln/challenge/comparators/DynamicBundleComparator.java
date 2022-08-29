@@ -27,14 +27,11 @@ public class DynamicBundleComparator implements Comparator<Bundle> {
      */
     public int compare(Bundle a, Bundle b) {
         if(this.compareBy == 'b'){
-            return Double.compare(a.getTotal(),b.getTotal());
+            return  a.getTotal().compareTo(b.getTotal());
         } else {
             WoodType wt = CommandsMap.commandsMap.get(String.valueOf(this.compareBy));
-            return Double.compare(getWoodPrice(a,wt),getWoodPrice(b,wt));
+            return a.getWoodPrice(wt).compareTo(b.getWoodPrice(wt));
         }
     }
 
-    private double getWoodPrice(Bundle b, WoodType woodType) {
-        return b.getWoods().get(woodType).getPrice();
-    }
 }

@@ -100,8 +100,8 @@ public class BundleManager {
         if(this.filter != null && this.filter.getCommands().size() > 0) {
             List<Comparator<Bundle>> comparatorList = new ArrayList<>();
             //loop through the commands and create comparator based on filter commands
-            this.filter.getCommands().stream().forEachOrdered(f -> {
-                comparatorList.add(new DynamicBundleComparator(f));
+            this.filter.getCommands().stream().forEachOrdered(command -> {
+                comparatorList.add(new DynamicBundleComparator(command));
             });
             //process comparator list
             this.bundles.sort(new MultiComparator<>(comparatorList));

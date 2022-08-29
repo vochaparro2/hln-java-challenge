@@ -1,11 +1,13 @@
 package com.hln.challenge.entities;
 
+import java.math.BigDecimal;
+
 public class Wood{
     private String id;
     private WoodType type;
-    private Double price;
+    private BigDecimal price;
 
-    public Wood(String id, String type, Double price) {
+    public Wood(String id, String type, BigDecimal price) {
         this.id = id;
         this.type =  WoodType.valueOf(type);
         this.price = price;
@@ -27,11 +29,11 @@ public class Wood{
         this.type = WoodType.valueOf(type);
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

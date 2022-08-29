@@ -1,6 +1,8 @@
 package com.hln.challenge.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class Bundle implements Serializable {
 
-    private double total;
+    private BigDecimal total;
     private Map<WoodType,Wood> woods;
 
     public Bundle() {
@@ -26,13 +28,17 @@ public class Bundle implements Serializable {
         this.setWoods(woodList.stream().collect(Collectors.toMap(wood -> wood.getType(), wood -> wood)));
     }
 
-    public double getTotal() {
+    public BigDecimal getTotal() {
         return total;
     }
 
     public void setTotal() {
         //sum all wood prices in map
-        this.total = woods.values().stream().mapToDouble(Wood::getPrice).sum();
+
+        this.total = woods.values().stream().map(Wood::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2,RoundingMode.HALF_UP);
+
     }
 
     public Map<WoodType, Wood> getWoods() {
@@ -50,7 +56,7 @@ public class Bundle implements Serializable {
 
     public boolean filter(Filter filter){
         //Checks if bundle should be filtered or not
-        return filter.getMaxPrice() >= this.total && filter.getMinPrice() <= this.total;
+        return filter.getMaxPrice() >= this.total.doubleValue() && filter.getMinPrice() <= this.total.doubleValue();
     }
 
     @Override
@@ -72,8 +78,13 @@ public class Bundle implements Serializable {
     }
 
 
-    public double getWoodPrice(Character woodType) {
+    public BigDecimal getWoodPrice(WoodType woodType) {
+        return woods.get(woodType).getPrice();
+    }
+
+    public BigDecimal getWoodPrice(Character woodType) {
         return woods.get(CommandsMap.commandsMap.get(woodType.toString())).getPrice();
     }
+
 
 }

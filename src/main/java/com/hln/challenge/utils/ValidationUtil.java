@@ -4,6 +4,8 @@ import com.hln.challenge.entities.CommandsMap;
 import com.hln.challenge.entities.Filter;
 import com.hln.challenge.entities.Wood;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,7 +55,7 @@ public class ValidationUtil {
         checkEmptyString(id,"Wood id");
         checkEmptyString(price,"Wood price");
 
-        double woodPrice =  getWoodPrice(price);
+        BigDecimal woodPrice =  getWoodPrice(price);
 
         return new Wood(id,type,woodPrice);
     }
@@ -82,10 +84,10 @@ public class ValidationUtil {
         return minPrice;
     }
 
-    private static double getWoodPrice(String price) {
-        double minPrice;
+    private static BigDecimal getWoodPrice(String price) {
+        BigDecimal minPrice;
         try {
-            minPrice =  Double.parseDouble(price.replace("$",""));
+            minPrice =  new BigDecimal(price.replace("$","")).setScale(2,RoundingMode.HALF_UP);
         } catch(Exception e){
             throw new NumberFormatException("Invalid price in file " + price);
         }
